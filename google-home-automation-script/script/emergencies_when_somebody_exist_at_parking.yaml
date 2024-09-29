@@ -1,0 +1,67 @@
+# ------------------------------------------------------------------------------------------ #
+# Lines starting with “#” are comments and will be ignored by the automation.
+# Indentation determines hierarchy within the script.
+# Visit g.co/home/script-editor-docs for full documentation.
+# ------------------------------------------------------------------------------------------ #
+## 目的
+## 車の盗難を防ぐため、夜間に自宅の庭に侵入した人がいたら、警告をスピーカーから流し、家族に通知する。
+## このスクリプトは、玄関のドアホンのモーションセンサーが動いた時に、夜間に動作する。
+## また、このスクリプトは、平日の23時から翌朝6時まで動作する。
+## 車の盗難は完全には、防げないため、あらかじめ正門からの侵入者の検知のみを目的とする。
+
+
+
+
+metadata:
+  name: emergencies when somebody exist at parking # Choose a short name that summarizes important starters and actions, like “Sunset lights”.
+  description: Scripted automation # Write a detailed description that includes everything the automation does, like “At sunset, on weekdays, close blinds, turn on lights to 50%, and play the sunset playlist on certain speakers.”
+
+automations:
+  # “starters” and “actions” are required; “conditions” are optional.
+  # Use Ctrl + Space to see autocomplete suggestions.
+
+  # ---- STARTERS ---- #
+  # Starters describe events that will start the automation.
+  # To add more than one starter, duplicate the "- type" section under "starters".
+  # If you add multiple starter events, any one of them happening will start the automation.
+  starters:
+    - type: device.event.MotionDetection # Motion has been detected by the device. # Motion has been detected by the device.
+      device: 玄関のドアホン - 玄関
+
+  # ---- CONDITIONS ---- #
+  # Conditions are optional. Delete this section if it’s empty.
+  # Conditions will prevent an automation from starting if the conditions aren’t met.
+  # See g.co/home/script-editor-docs for documentation about how to use logical operators like “and”, “or”, and “not”.
+  condition:
+    type: time.between
+    # Optional. Accepts either clock time (10:00:00 AM, with seconds optional, or in a 24 hour format), or 'sunrise' or 'sunset', with an optional offset ('sunrise+10m', for instance)
+    before: 06:00 # HH:MM (24 hours format). Adjust time as needed
+    # Optional. Accepts either clock time (10:00:00 AM, with seconds optional, or in a 24 hour format), or 'sunrise' or 'sunset', with an optional offset ('sunrise+10m', for instance)
+    after: 23:00 # HH:MM (24 hours format). Adjust time as needed
+    # Optional. Days of the week to apply condition on.
+    weekdays:
+      - MON
+      - TUE
+      - WED
+      - THU
+      - FRI
+      - SAT
+      - SUN
+
+  # ---- ACTIONS ---- #
+  # Actions will start when a starter event takes place and all conditions are met.
+  # Actions will start in the order they appear in the script and with any delay specified.
+  # To add more than one action, duplicate the "- type" section under "actions".
+  actions:
+    - type: home.command.Notification # Send a notification to the specified home members.
+      # Title of the notification. [Available parameter options: title, body, members]
+      title: 夜中に家に入っている人がいます。
+      body: 夜中に誰か庭に侵入しています。
+      members:
+        - wataruhh0713@gmail.com
+        - yokoyajima0511@gmail.com
+    - type: assistant.command.Broadcast
+      message: 侵入者です。対応してください。侵入者です。対応してください。侵入者です。対応してください。侵入者です。対応してください。侵入者です。対応してください。侵入者です。対応してください。侵入者です。対応してください。侵入者です。対応してください。
+      devices:
+        - キッチン - キッチン
+        - 寝室 - 寝室
